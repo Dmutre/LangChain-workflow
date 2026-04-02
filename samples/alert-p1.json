@@ -1,0 +1,10 @@
+{
+  "raw_text": "CRITICAL: TypeError: Cannot read properties of null (reading 'id')\n    at PaymentService.processOrder (payment.service.ts:142:28)\n    at async OrderController.checkout (order.controller.ts:89:5)\n\nError rate spiked to 45% on /api/checkout endpoint.\nStarted at: 2024-01-15T10:22:00Z\nAffected users: ~2,300\nEnvironment: production",
+  "source": "datadog-alert",
+  "timestamp": "2024-01-15T10:23:00.000Z",
+  "metadata": {
+    "service": "payment-service",
+    "environment": "production",
+    "region": "eu-west-1"
+  }
+}

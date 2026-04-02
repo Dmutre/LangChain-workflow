@@ -1,0 +1,188 @@
+[
+  {
+    "id": "RB-payment-P1",
+    "category": "payment",
+    "severity": "P1",
+    "escalate_to": "payments-oncall",
+    "estimated_resolution_minutes": 30,
+    "steps": [
+      "1. Immediately check payment service health: `curl https://internal/health/payment`",
+      "2. Check error rate in Datadog dashboard: Payments > Error Rate (last 15m)",
+      "3. Review recent deployments: `git log --oneline -10` on payment-service",
+      "4. If spike after deploy → rollback: `kubectl rollout undo deployment/payment-service`",
+      "5. Check downstream payment gateway status page (Stripe/Revolut/PagBrasil)",
+      "6. If gateway issue → enable circuit breaker flag: `PAYMENT_CIRCUIT_BREAKER=true`",
+      "7. Notify customers via status page if downtime > 5 minutes",
+      "8. Page payments-oncall engineer if unresolved after 10 minutes"
+    ]
+  },
+  {
+    "id": "RB-payment-P2",
+    "category": "payment",
+    "severity": "P2",
+    "escalate_to": "backend-team",
+    "estimated_resolution_minutes": 60,
+    "steps": [
+      "1. Check payment service logs: `kubectl logs -l app=payment-service --tail=200`",
+      "2. Identify affected transaction IDs from logs",
+      "3. Check if issue is isolated to specific payment method or gateway",
+      "4. Review webhook delivery status in provider dashboard",
+      "5. Check idempotency key store (Redis) for duplicates",
+      "6. If webhook issue → replay failed webhooks from provider dashboard",
+      "7. Escalate to backend-team if root cause unclear after 20 minutes"
+    ]
+  },
+  {
+    "id": "RB-database-P1",
+    "category": "database",
+    "severity": "P1",
+    "escalate_to": "dba-oncall",
+    "estimated_resolution_minutes": 45,
+    "steps": [
+      "1. Check DB connectivity: `psql $DATABASE_URL -c 'SELECT 1'`",
+      "2. Check active connections: `SELECT count(*) FROM pg_stat_activity`",
+      "3. Check for deadlocks: `SELECT * FROM pg_locks WHERE NOT granted`",
+      "4. Kill blocking queries if safe: `SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE state = 'idle in transaction' AND query_start < NOW() - INTERVAL '5 minutes'`",
+      "5. Check connection pool metrics in application (max_connections vs active)",
+      "6. If pool exhausted → restart connection pool manager",
+      "7. Check disk space: `df -h` on DB server",
+      "8. Page dba-oncall immediately for data integrity concerns"
+    ]
+  },
+  {
+    "id": "RB-database-P2",
+    "category": "database",
+    "severity": "P2",
+    "escalate_to": "backend-team",
+    "estimated_resolution_minutes": 90,
+    "steps": [
+      "1. Review slow query log: `SELECT query, mean_exec_time FROM pg_stat_statements ORDER BY mean_exec_time DESC LIMIT 20`",
+      "2. Check index usage: `SELECT * FROM pg_stat_user_indexes WHERE idx_scan = 0`",
+      "3. Run EXPLAIN ANALYZE on slow queries",
+      "4. Check autovacuum status on affected tables",
+      "5. Escalate to backend-team for query optimization"
+    ]
+  },
+  {
+    "id": "RB-auth-P1",
+    "category": "auth",
+    "severity": "P1",
+    "escalate_to": "security-oncall",
+    "estimated_resolution_minutes": 20,
+    "steps": [
+      "1. Determine scope: how many users affected? Check auth service error rate",
+      "2. Check if JWT secret was recently rotated (env vars, secrets manager)",
+      "3. Check auth service logs for specific error: invalid signature vs expired vs malformed",
+      "4. If secret mismatch → coordinate secret rollback with security team",
+      "5. If potential breach → page security-oncall IMMEDIATELY",
+      "6. Consider forcing re-login for all users if tokens compromised",
+      "7. Monitor for unusual auth patterns (brute force, credential stuffing)"
+    ]
+  },
+  {
+    "id": "RB-auth-P2",
+    "category": "auth",
+    "severity": "P2",
+    "escalate_to": "backend-team",
+    "estimated_resolution_minutes": 30,
+    "steps": [
+      "1. Check auth service logs for error patterns",
+      "2. Verify token expiry configuration",
+      "3. Check if specific user agents or regions affected",
+      "4. Review recent auth service deployments",
+      "5. Escalate to security team if suspicious patterns found"
+    ]
+  },
+  {
+    "id": "RB-network-P1",
+    "category": "network",
+    "severity": "P1",
+    "escalate_to": "infra-oncall",
+    "estimated_resolution_minutes": 30,
+    "steps": [
+      "1. Ping affected services: `ping internal-service-name`",
+      "2. Check service mesh / load balancer status",
+      "3. Review firewall rules for recent changes",
+      "4. Check DNS resolution: `nslookup service-name`",
+      "5. Verify network security groups / VPC settings",
+      "6. Check cloud provider status page for outages",
+      "7. If load balancer issue → failover to backup region",
+      "8. Page infra-oncall for network-level changes"
+    ]
+  },
+  {
+    "id": "RB-infra-P1",
+    "category": "infra",
+    "severity": "P1",
+    "escalate_to": "infra-oncall",
+    "estimated_resolution_minutes": 30,
+    "steps": [
+      "1. Check server metrics: CPU, memory, disk I/O",
+      "2. Identify top resource consumers: `top` or `kubectl top pods`",
+      "3. Check for OOM kills: `dmesg | grep -i kill`",
+      "4. Scale up if capacity issue: `kubectl scale deployment/app --replicas=5`",
+      "5. Check recent infrastructure changes (Terraform, Kubernetes configs)",
+      "6. Review auto-scaling configuration and limits",
+      "7. Page infra-oncall for hardware-level issues"
+    ]
+  },
+  {
+    "id": "RB-infra-P2",
+    "category": "infra",
+    "severity": "P2",
+    "escalate_to": "devops-team",
+    "estimated_resolution_minutes": 60,
+    "steps": [
+      "1. Review resource utilization trends over last 24h",
+      "2. Check horizontal pod autoscaler status",
+      "3. Analyze application profiling data",
+      "4. Review and optimize resource requests/limits in Kubernetes manifests",
+      "5. Escalate to devops-team for infrastructure optimization"
+    ]
+  },
+  {
+    "id": "RB-application-P1",
+    "category": "application",
+    "severity": "P1",
+    "escalate_to": "backend-oncall",
+    "estimated_resolution_minutes": 25,
+    "steps": [
+      "1. Check application health endpoints",
+      "2. Review application error logs (last 30 minutes)",
+      "3. Check recent deployments: rollback if correlated",
+      "4. Identify specific error type and stack trace",
+      "5. Check feature flags — disable recently enabled flags",
+      "6. If memory/CPU spike → restart affected pods",
+      "7. Page backend-oncall if unresolved after 15 minutes"
+    ]
+  },
+  {
+    "id": "RB-application-P2",
+    "category": "application",
+    "severity": "P2",
+    "escalate_to": "backend-team",
+    "estimated_resolution_minutes": 60,
+    "steps": [
+      "1. Reproduce issue in staging environment",
+      "2. Analyze stack trace and identify root cause",
+      "3. Check for related GitHub issues or known bugs",
+      "4. Apply hotfix or workaround",
+      "5. Deploy fix through standard CI/CD pipeline"
+    ]
+  },
+  {
+    "id": "RB-unknown-P1",
+    "category": "unknown",
+    "severity": "P1",
+    "escalate_to": "oncall-lead",
+    "estimated_resolution_minutes": 60,
+    "steps": [
+      "1. Gather all available information: logs, metrics, traces",
+      "2. Identify which service(s) are affected",
+      "3. Check all dashboards: application, infrastructure, network",
+      "4. Review all recent changes across all services",
+      "5. Page oncall-lead to coordinate cross-team investigation",
+      "6. Open a war room channel: #incident-YYYY-MM-DD"
+    ]
+  }
+]

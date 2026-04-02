@@ -1,0 +1,90 @@
+[
+  {
+    "id": "INC-2024-001",
+    "title": "Payment service null reference on order processing",
+    "category": "payment",
+    "severity": "P1",
+    "keywords": ["TypeError", "null", "payment", "processOrder", "undefined"],
+    "resolved_in_minutes": 23,
+    "resolution_summary": "Null check added before accessing order.id in PaymentService. Root cause: race condition when order was deleted mid-processing."
+  },
+  {
+    "id": "INC-2024-002",
+    "title": "Database connection pool exhausted under load",
+    "category": "database",
+    "severity": "P1",
+    "keywords": ["connection", "pool", "timeout", "ECONNREFUSED", "postgres", "database"],
+    "resolved_in_minutes": 45,
+    "resolution_summary": "Increased connection pool size from 10 to 50. Added connection timeout and retry logic. Root cause: traffic spike during promotion."
+  },
+  {
+    "id": "INC-2024-003",
+    "title": "Auth service JWT validation failures",
+    "category": "auth",
+    "severity": "P2",
+    "keywords": ["JWT", "token", "invalid", "unauthorized", "auth", "403", "401"],
+    "resolved_in_minutes": 15,
+    "resolution_summary": "JWT secret rotation caused token mismatch. Rolled back secret and coordinated rotation with zero-downtime procedure."
+  },
+  {
+    "id": "INC-2024-004",
+    "title": "High CPU on application servers causing latency",
+    "category": "infra",
+    "severity": "P2",
+    "keywords": ["CPU", "latency", "performance", "slow", "timeout", "response time"],
+    "resolved_in_minutes": 60,
+    "resolution_summary": "Inefficient regex in request parser causing CPU spike. Optimized regex and added rate limiting."
+  },
+  {
+    "id": "INC-2024-005",
+    "title": "Network packet loss between services",
+    "category": "network",
+    "severity": "P1",
+    "keywords": [
+      "network",
+      "packet loss",
+      "timeout",
+      "ETIMEDOUT",
+      "connection reset",
+      "unreachable"
+    ],
+    "resolved_in_minutes": 30,
+    "resolution_summary": "Misconfigured firewall rule blocking inter-service traffic. Reverted last network config change."
+  },
+  {
+    "id": "INC-2024-006",
+    "title": "Application OOM crash in worker process",
+    "category": "application",
+    "severity": "P2",
+    "keywords": ["OOM", "out of memory", "heap", "memory", "killed", "SIGKILL"],
+    "resolved_in_minutes": 20,
+    "resolution_summary": "Memory leak in event listener not being cleaned up. Added proper cleanup in service shutdown hooks."
+  },
+  {
+    "id": "INC-2024-007",
+    "title": "Payment gateway webhook HMAC signature mismatch",
+    "category": "payment",
+    "severity": "P2",
+    "keywords": ["webhook", "HMAC", "signature", "invalid", "payment", "verification"],
+    "resolved_in_minutes": 12,
+    "resolution_summary": "Webhook secret was rotated on provider side without notice. Updated secret in environment variables."
+  },
+  {
+    "id": "INC-2023-087",
+    "title": "Postgres deadlock on concurrent order updates",
+    "category": "database",
+    "severity": "P1",
+    "keywords": ["deadlock", "postgres", "concurrent", "lock", "transaction", "database"],
+    "resolved_in_minutes": 35,
+    "resolution_summary": "Deadlock caused by inconsistent lock ordering in transaction. Fixed by standardizing table access order."
+  },
+  {
+    "id": "INC-2023-102",
+    "title": "Redis cache eviction causing payment double-processing",
+    "category": "payment",
+    "severity": "P1",
+    "keywords": ["redis", "cache", "eviction", "duplicate", "payment", "idempotency"],
+    "resolved_in_minutes": 40,
+    "resolution_summary": "Redis maxmemory policy set to allkeys-lru evicted idempotency keys. Changed policy and increased memory."
+  }
+]

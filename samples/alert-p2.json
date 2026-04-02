@@ -1,0 +1,10 @@
+{
+  "raw_text": "WARNING: Database connection pool exhausted\nActive connections: 50/50\nWaiting queue: 127 requests\nSlow query detected: SELECT * FROM orders WHERE user_id = ? took 8.2s\nPostgres host: db-primary.internal\nDatabase: production_db\nStarted degrading at: 2024-01-15T14:10:00Z",
+  "source": "prometheus-alert",
+  "timestamp": "2024-01-15T14:15:00.000Z",
+  "metadata": {
+    "service": "api-gateway",
+    "environment": "production",
+    "alert_name": "HighDBConnectionPool"
+  }
+}
