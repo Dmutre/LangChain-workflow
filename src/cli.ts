@@ -4,7 +4,17 @@ import { resolve } from "path";
 import { runTriageAgent } from "./agent/triage-graph.js";
 import { AlertInputSchema } from "./schemas/agent-validation.schema.js";
 
-const samplePath = process.argv[2] ?? "samples/alert-p2.json";
+const DEMO_SAMPLE = "samples/demo-alert.json";
+
+const argv = process.argv.slice(2);
+const useDemo =
+  argv.includes("--demo") ||
+  argv.includes("-d") ||
+  process.env.DEMO === "1" ||
+  process.env.DEMO_MODE === "1";
+
+const positional = argv.filter((a) => !a.startsWith("-"));
+const samplePath = useDemo ? DEMO_SAMPLE : (positional[0] ?? "samples/alert-p2.json");
 const filePath = resolve(process.cwd(), samplePath);
 
 const raw = readFileSync(filePath, "utf-8");

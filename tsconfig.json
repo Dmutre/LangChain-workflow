@@ -17,6 +17,6 @@
     "sourceMap": true,
     "isolatedModules": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.json"],
   "exclude": ["node_modules", "dist"]
 }

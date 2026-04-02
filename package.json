@@ -7,8 +7,8 @@
   "types": "./dist/agent/triage-graph.d.ts",
   "scripts": {
     "build": "tsc",
+    "demo": "node dist/cli.js --demo",
     "start": "node dist/cli.js",
-    "triage": "node dist/cli.js",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
