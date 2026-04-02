@@ -17,6 +17,9 @@ importers:
       '@langchain/openai':
         specifier: ^1.4.1
         version: 1.4.1(@langchain/core@1.1.38(openai@6.33.0(zod@4.3.6)))
+      dotenv:
+        specifier: ^17.4.0
+        version: 17.4.0
       p-retry:
         specifier: ^8.0.0
         version: 8.0.0
@@ -322,6 +325,10 @@ packages:
 
   deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
+
+  dotenv@17.4.0:
+    resolution: {integrity: sha512-kCKF62fwtzwYm0IGBNjRUjtJgMfGapII+FslMHIjMR5KTnwEmBmWLDRSnc3XSNP8bNy34tekgQyDT0hr7pERRQ==}
+    engines: {node: '>=12'}
 
   escape-string-regexp@4.0.0:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
@@ -1031,6 +1038,8 @@ snapshots:
   decamelize@1.2.0: {}
 
   deep-is@0.1.4: {}
+
+  dotenv@17.4.0: {}
 
   escape-string-regexp@4.0.0: {}
 
