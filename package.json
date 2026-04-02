@@ -9,13 +9,14 @@
     "build": "tsc",
     "demo": "node dist/cli.js --demo",
     "start": "node dist/cli.js",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit -p tsconfig.all.json",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check": "pnpm run typecheck && pnpm run lint && pnpm run format:check",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -37,6 +38,7 @@
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.4.2",
     "typescript": "^5.7.2",
-    "typescript-eslint": "^8.18.2"
+    "typescript-eslint": "^8.18.2",
+    "vitest": "^4.1.2"
   }
 }
