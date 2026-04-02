@@ -223,17 +223,7 @@ If the API returns an error (as in a **billing / quota** failure), you will see 
 
 ---
 
-## Submission checklist
-
-| Item                       | Status                                                    |
-| -------------------------- | --------------------------------------------------------- |
-| Source code in repo        | Yes                                                       |
-| README (this file)         | Yes                                                       |
-| Sample inputs (`samples/`) | Yes                                                       |
-| Tests + `pnpm test`        | Yes                                                       |
-| Public Git URL             | **Publish** this repo to GitHub/GitLab and share the link |
-
-**Optional but recommended:** add a **CI** workflow that runs `pnpm run check && pnpm test` on every push.
+**CI:** GitHub Actions runs **`pnpm run check`** (typecheck, ESLint, Prettier) and **`pnpm test`** on every **push to `main`** and on **all pull requests** (see `.github/workflows/ci.yml`).
 
 ---
 
