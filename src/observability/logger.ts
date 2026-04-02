@@ -56,7 +56,7 @@ export const logger = {
   },
 
   toolCall(tool: string, input: unknown) {
-    log.info({ context: "TOOL", tool, input }, `→ ${tool}`);
+    log.info({ context: "TOOL", tool, input }, `-> ${tool}`);
   },
 
   toolResult(
@@ -77,9 +77,9 @@ export const logger = {
     trace.push(entry);
 
     if (success) {
-      log.info({ context: "TOOL", tool, durationMs, outputSummary }, `✓ ${tool} completed`);
+      log.info({ context: "TOOL", tool, durationMs, outputSummary }, `[ok] ${tool} completed`);
     } else {
-      log.error({ context: "TOOL", tool, durationMs, err: error }, `✗ ${tool} failed`);
+      log.error({ context: "TOOL", tool, durationMs, err: error }, `[fail] ${tool} failed`);
     }
   },
 
